@@ -17,13 +17,17 @@ export interface QueueItem {
 export interface GraphNode {
   id: string;
   label: string;
-  group: string;
+  group: string; // Type of entity, e.g., 'Person', 'Concept'
+  sourceText: string;
+  summary: string; // AI-generated interpretation of the node's significance
+  shape?: 'circle' | 'diamond'; // Visual representation
 }
 
 export interface GraphLink {
   source: string;
   target: string;
   label: string;
+  group: string; // Used for color-coding relationships
 }
 
 export interface GraphData {
