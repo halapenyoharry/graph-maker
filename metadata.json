@@ -1,5 +1,5 @@
 {
-  "name": "Knowledge Graph Generator",
+  "name": "graph-maker",
   "description": "An application that takes URLs of documents like novels or scientific papers and transforms them into interactive knowledge graphs. It's designed to help users visualize and interact with complex information, with a queueing system to process documents continuously.",
   "requestFramePermissions": []
 }
