@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QueueItem, Status } from '../types';
 
@@ -6,6 +5,8 @@ interface QueueProps {
   queue: QueueItem[];
   onClear: () => void;
   onRemoveItem: (id: number) => void;
+  onShowGraph: (id: number) => void;
+  displayedGraphId: number | null;
 }
 
 const statusStyles = {
@@ -15,7 +16,7 @@ const statusStyles = {
   [Status.Failed]: 'bg-red-600 text-red-100',
 };
 
-const Queue: React.FC<QueueProps> = ({ queue, onClear, onRemoveItem }) => {
+const Queue: React.FC<QueueProps> = ({ queue, onClear, onRemoveItem, onShowGraph, displayedGraphId }) => {
   return (
     <div className="bg-gray-800 p-4 rounded-lg shadow-lg flex-grow flex flex-col">
       <div className="flex justify-between items-center mb-4">
@@ -36,7 +37,10 @@ const Queue: React.FC<QueueProps> = ({ queue, onClear, onRemoveItem }) => {
             {queue.map((item) => (
               <li
                 key={item.id}
-                className="bg-gray-700 p-2 rounded-md flex items-center justify-between text-sm"
+                className={`bg-gray-700 p-2 rounded-md flex items-center justify-between text-sm transition-all duration-200 
+                            ${item.status === Status.Completed ? 'cursor-pointer hover:bg-gray-600' : ''}
+                            ${displayedGraphId === item.id ? 'ring-2 ring-cyan-500' : ''}`}
+                onClick={() => item.status === Status.Completed && onShowGraph(item.id)}
               >
                 <div className="flex-grow truncate mr-2" title={item.source}>
                   {item.source}
@@ -47,7 +51,7 @@ const Queue: React.FC<QueueProps> = ({ queue, onClear, onRemoveItem }) => {
                   >
                     {item.status}
                   </span>
-                  <button onClick={() => onRemoveItem(item.id)} className="text-gray-400 hover:text-red-400">
+                  <button onClick={(e) => { e.stopPropagation(); onRemoveItem(item.id); }} className="text-gray-400 hover:text-red-400">
                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>

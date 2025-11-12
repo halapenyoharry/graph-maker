@@ -43,7 +43,7 @@ const InputArea: React.FC<InputAreaProps> = ({ onAddUrl, onAddFile }) => {
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://archive.org/details/moby-dick..."
+                placeholder="https://www.gutenberg.org/files/2701/2701-0.txt"
                 className="flex-grow bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-gray-200"
             />
             <button
@@ -62,10 +62,11 @@ const InputArea: React.FC<InputAreaProps> = ({ onAddUrl, onAddFile }) => {
             id="file-input"
             ref={fileInputRef}
             type="file"
+            accept=".txt,.md,text/plain,text/markdown,application/pdf"
             onChange={handleFileChange}
             className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-700 file:text-cyan-100 hover:file:bg-cyan-600"
         />
-        <p className="text-xs text-gray-500 mt-1">Uploading files is recommended for accurate content analysis.</p>
+        <p className="text-xs text-gray-500 mt-1">Now supports PDF, .txt, and .md files. Recommended for accuracy.</p>
       </div>
 
       <div>

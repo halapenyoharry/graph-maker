@@ -66,7 +66,7 @@ export const generateKnowledgeGraph = async (documentContent: string, customProm
       ${basePrompt}
       ${customPrompt ? `\n\nFollow these additional user instructions: "${customPrompt}"` : ''}
       
-      Document Content: "${documentContent.substring(0, 8000)}..."
+      Document Content: "${documentContent}"
     `;
 
     const response = await ai.models.generateContent({

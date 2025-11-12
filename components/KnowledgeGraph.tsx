@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { GraphData, GraphNode, GraphLink } from '../types';
@@ -20,14 +19,16 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
 
     svg.selectAll("*").remove(); // Clear previous graph
 
+    const g = svg.append("g"); // Add a container group for zooming
+
     const simulation = d3
       .forceSimulation(nodes as d3.SimulationNodeDatum[])
       .force("link", d3.forceLink(links).id((d: any) => d.id).distance(100))
-      .force("charge", d3.forceManyBody().strength(-300))
+      .force("charge", d3.forceManyBody().strength(-350))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collide", d3.forceCollide().radius(30));
+      .force("collide", d3.forceCollide().radius(35));
 
-    const link = svg
+    const link = g
       .append("g")
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.6)
@@ -38,7 +39,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
       
-    const node = svg
+    const node = g
       .append("g")
       .attr("stroke", "#fff")
       .attr("stroke-width", 1.5)
@@ -56,7 +57,10 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
         .attr("y", "0.31em")
         .text((d: any) => d.label)
         .style("font-size", "12px")
-        .style("fill", "#ddd");
+        .style("fill", "#ddd")
+        .attr("stroke", "none")
+        .attr("stroke-width", 0);
+
 
     simulation.on("tick", () => {
       link
@@ -68,6 +72,16 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
       node.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
     });
 
+    // Zoom functionality
+    const zoom = d3.zoom<SVGSVGElement, unknown>()
+        .scaleExtent([0.1, 8])
+        .on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        });
+    
+    svg.call(zoom);
+
+    // Drag functionality
     function drag(simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>) {
         function dragstarted(event: any, d: any) {
             if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -99,7 +113,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
   }, [data]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex-grow">
+    <div ref={containerRef} className="w-full h-full flex-grow cursor-grab active:cursor-grabbing">
       <svg ref={svgRef} className="w-full h-full"></svg>
     </div>
   );
